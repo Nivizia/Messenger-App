@@ -9,15 +9,30 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="8*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <!--Chatter username section-->
+        <Label x:Name="ChattingUserName" Content="ChattingUserPlaceHolder" Grid.Row="0" Grid.Column="0"/>
         
-        
-        
+        <!--Chat history section-->
+
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Margin="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="ChatHistoryPanel">
+                    <!-- Chat messages will be added here dynamically -->
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!--Message input section-->
+        <TextBox x:Name="MessageInput" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" Height="50" VerticalAlignment="Center"/>
+
     </Grid>
 </Window>
