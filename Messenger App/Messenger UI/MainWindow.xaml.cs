@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Messenger_UI
+namespace MessengerUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

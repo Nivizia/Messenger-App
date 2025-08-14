@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace Messenger_UI
+namespace MessengerUI
 {
     /// <summary>
     /// Interaction logic for App.xaml
