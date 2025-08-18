@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36127.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messenger UI", "Messenger UI\Messenger UI.csproj", "{0A9757AD-D756-42D3-B738-AB5B4957DE85}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessengerUI", "Messenger UI\MessengerUI.csproj", "{0A9757AD-D756-42D3-B738-AB5B4957DE85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiFetcher", "ApiFetcher\ApiFetcher.csproj", "{78D7EE4B-40AD-4A0F-ACF1-1F4E95AEE3CF}"
 EndProject
