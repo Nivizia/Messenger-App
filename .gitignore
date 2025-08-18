@@ -248,7 +248,4 @@ git_stats/*
 StyleCop.Cache
 bin
 obj
-/Messenger App/.vs/Messenger App/CopilotIndices
-/Messenger App/.vs/Messenger App/DesignTimeBuild
-/Messenger App/.vs/Messenger App/FileContentIndex
-/Messenger App/.vs
+/MessengerApp/.vs
