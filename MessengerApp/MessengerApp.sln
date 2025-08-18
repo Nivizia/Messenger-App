@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36127.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessengerUI", "Messenger UI\MessengerUI.csproj", "{0A9757AD-D756-42D3-B738-AB5B4957DE85}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiFetcher", "ApiFetcher\ApiFetcher.csproj", "{78D7EE4B-40AD-4A0F-ACF1-1F4E95AEE3CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppTest", "ConsoleAppTest\ConsoleAppTest.csproj", "{32D26A18-ACBB-48B8-A7AD-4C5073B016AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessengerUI", "MessengerUI\MessengerUI.csproj", "{72D91969-6302-9BD5-A8A1-D184542F745B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0A9757AD-D756-42D3-B738-AB5B4957DE85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A9757AD-D756-42D3-B738-AB5B4957DE85}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A9757AD-D756-42D3-B738-AB5B4957DE85}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A9757AD-D756-42D3-B738-AB5B4957DE85}.Release|Any CPU.Build.0 = Release|Any CPU
 		{78D7EE4B-40AD-4A0F-ACF1-1F4E95AEE3CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{78D7EE4B-40AD-4A0F-ACF1-1F4E95AEE3CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78D7EE4B-40AD-4A0F-ACF1-1F4E95AEE3CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{32D26A18-ACBB-48B8-A7AD-4C5073B016AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32D26A18-ACBB-48B8-A7AD-4C5073B016AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32D26A18-ACBB-48B8-A7AD-4C5073B016AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72D91969-6302-9BD5-A8A1-D184542F745B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72D91969-6302-9BD5-A8A1-D184542F745B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72D91969-6302-9BD5-A8A1-D184542F745B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72D91969-6302-9BD5-A8A1-D184542F745B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
