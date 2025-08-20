@@ -1,11 +1,11 @@
-﻿<Window x:Class="MessengerUI.MainWindow"
+﻿<Window x:Class="MessengerUI.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="LoginWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -35,22 +35,19 @@
                     <RowDefinition Height="3*"/>
                     <RowDefinition Height="3*"/>
                     <RowDefinition Height="3*"/>
-                    <RowDefinition Height="3*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
 
-                <TextBlock Text="Register Account" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.ColumnSpan="4" Grid.Column="0"/>
+                <TextBlock Text="Login Account" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.ColumnSpan="4" Grid.Column="0"/>
 
-                <Label Content="Email:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
-                <Label Content="Username:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
-                <Label Content="Password:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1"/>
+                <Label Content="Username:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <Label Content="Password:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
 
-                <TextBox Name="EmailTextBox" Grid.Row="2" Grid.Column="2" MaxHeight="25" MaxWidth="200"/>
-                <TextBox Name="UsernameTextBox" Grid.Row="3" Grid.Column="2" MaxHeight="25" MaxWidth="200"/>
-                <PasswordBox Name="PasswordBox" Grid.Row="4" Grid.Column="2" MaxHeight="25" MaxWidth="200"/>
+                <TextBox Name="UsernameTextBox" Grid.Row="2" Grid.Column="2" MaxHeight="25" MaxWidth="200"/>
+                <PasswordBox Name="PasswordBox" Grid.Row="3" Grid.Column="2" MaxHeight="25" MaxWidth="200"/>
 
-                <Grid Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="1">
+                <Grid Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="3*"/>

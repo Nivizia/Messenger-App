@@ -18,7 +18,7 @@
 
         <!-- Header Section -->
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0">
-            
+            <TextBlock Text="UsernamePlaceholder" x:Name="UsernamePlaceholder"></TextBlock>
         </StackPanel>
     </Grid>
 </Window>
