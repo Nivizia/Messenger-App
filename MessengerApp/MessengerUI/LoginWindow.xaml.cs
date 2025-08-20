@@ -27,7 +27,7 @@ namespace MessengerUI
             InitializeComponent();
         }
 
-        private async void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string Username = UsernameTextBox.Text.Trim();
             string Password = PasswordBox.Password.Trim();
@@ -70,6 +70,13 @@ namespace MessengerUI
             {
                 MessageBox.Show("Login failed. Please check your username and password.");
             }
+        }
+
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Hide();
         }
     }
 }

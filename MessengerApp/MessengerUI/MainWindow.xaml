@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -53,7 +53,9 @@
                 <Grid Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="6*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -63,6 +65,7 @@
                     </Grid.RowDefinitions>
 
                     <Button Content="Confirm" Grid.Column="1" Grid.Row="1" Click="RegisterButton_Click"/>
+                    <Button Content="Back to Login" Grid.Column="3" Grid.Row="1" Click="BackToLoginButton_Click"/>
                 </Grid>
 
             </Grid>

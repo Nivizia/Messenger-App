@@ -65,5 +65,12 @@ namespace MessengerUI
                 MessageBox.Show("Registration fail");
             }
         }
+
+        private void BackToLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            this.Close();
+        }
     }
 }
