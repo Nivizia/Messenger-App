@@ -19,12 +19,15 @@ namespace MessengerUI
     /// </summary>
     public partial class ContactWindow : Window
     {
-        private string _username;
-        public ContactWindow(string Username)
+        public string Username = string.Empty;
+        public ContactWindow()
         {
-            _username = Username;
-            UsernamePlaceholder.Text = _username;
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            UsernamePlaceholder.Text = Username;
         }
     }
 }

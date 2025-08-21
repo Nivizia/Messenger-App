@@ -58,11 +58,23 @@ namespace MessengerUI
 
             if (success)
             {
-                MessageBox.Show("Registration successful");
+                MessageBox.Show("Registration successful, please verify your email!");
             }
             else
             {
                 MessageBox.Show("Registration fail");
+            }
+
+            var VerifyBoolean = await AuthService.VerifyEmailAsync(email);
+
+            if (VerifyBoolean)
+            {
+                MessageBox.Show("Verification email sent successfully! Please check your inbox.");
+                VerifyEmail verifyEmailWindow = new VerifyEmail();
+                verifyEmailWindow.currentEmail = email;
+                verifyEmailWindow.currentUsername = username;
+                verifyEmailWindow.Show();
+                this.Close();
             }
         }
 

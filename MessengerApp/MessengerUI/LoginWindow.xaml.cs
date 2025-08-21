@@ -62,7 +62,8 @@ namespace MessengerUI
 
                 File.WriteAllBytes("auth.token", encryptedToken);
                 
-                ContactWindow contactWindow = new ContactWindow(Username);
+                ContactWindow contactWindow = new ContactWindow();
+                contactWindow.Username = Username;
                 contactWindow.Show();
                 this.Close();
             }

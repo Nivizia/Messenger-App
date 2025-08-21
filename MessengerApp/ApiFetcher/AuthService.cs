@@ -37,6 +37,11 @@ namespace ApiFetcher
             if (response.IsSuccessStatusCode)
             {
                 using var doc = JsonDocument.Parse(json);
+
+                if (doc.RootElement.TryGetProperty("is_email_verification", out var isVerified) is false)
+                {
+                    return null;
+                }
                 if (doc.RootElement.TryGetProperty("access_token", out var token))
                 {
                     return token.GetString();
@@ -78,8 +83,76 @@ namespace ApiFetcher
                     return successProp.GetBoolean();
                 }
             }
+            var error = JsonDocument.Parse(json).RootElement.GetProperty("error").GetString();
+            Console.WriteLine(error);
 
             return false; // đăng ký thất bại
+        }
+
+        public static async Task<bool> VerifyEmailAsync(string email)
+        {
+            try
+            {
+                // Tạo URL với query param email
+                string url = $"https://api.mmb.io.vn/py/api/user/email/verify?email={Uri.EscapeDataString(email)}";
+
+                // Tạo request POST
+                var request = new HttpRequestMessage(HttpMethod.Post, url);
+                request.Headers.Add("accept", "application/json");
+
+                // Vì API không yêu cầu body nên gửi rỗng
+                request.Content = new StringContent("");
+
+                // Gửi request
+                HttpResponseMessage response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                // Đọc response body
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                // Parse JSON
+                using var doc = JsonDocument.Parse(responseBody);
+                if (doc.RootElement.TryGetProperty("success", out JsonElement successElement))
+                {
+                    return successElement.GetBoolean();
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
+        }
+
+        public static async Task<bool> ConfirmEmailAsync(string currentEmail, string code)
+        {
+            try
+            {
+                string url = $"https://api.mmb.io.vn/py/api/user/email/confirm?code={Uri.EscapeDataString(code)}&current_email={Uri.EscapeDataString(currentEmail)}";
+
+                var request = new HttpRequestMessage(HttpMethod.Post, url);
+                request.Headers.Add("accept", "application/json");
+                request.Content = new StringContent("");
+
+                HttpResponseMessage response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                using var doc = JsonDocument.Parse(responseBody);
+                if (doc.RootElement.TryGetProperty("success", out JsonElement successElement))
+                {
+                    return successElement.GetBoolean();
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 
