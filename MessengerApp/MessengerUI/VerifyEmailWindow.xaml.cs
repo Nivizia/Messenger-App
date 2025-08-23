@@ -30,6 +30,7 @@ namespace MessengerUI
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmButton.IsEnabled = false;
             string code = CodeTextBox.Text.Trim();
 
             var ConfirmVerifyBoolean = await AuthService.ConfirmEmailAsync(currentEmail, code);
@@ -37,6 +38,7 @@ namespace MessengerUI
             if (ConfirmVerifyBoolean)
             {
                 MessageBox.Show("Email verification successful!");
+                ConfirmButton.IsEnabled = true;
                 this.Hide();
                 ContactWindow contactWindow = new ContactWindow();
                 contactWindow.Username = currentUsername;
@@ -45,6 +47,7 @@ namespace MessengerUI
             else
             {
                 MessageBox.Show("Email verification failed. Please check your code and try again.");
+                ConfirmButton.IsEnabled = true;
             }
         }
     }

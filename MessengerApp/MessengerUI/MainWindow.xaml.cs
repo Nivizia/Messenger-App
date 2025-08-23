@@ -24,6 +24,8 @@ namespace MessengerUI
 
         private async void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmButton.IsEnabled = false;
+
             string email = EmailTextBox.Text.Trim();
             string username = UsernameTextBox.Text.Trim();
             string password = PasswordBox.Password.Trim();
@@ -39,18 +41,21 @@ namespace MessengerUI
             if (!isValidEmail)
             {
                 MessageBox.Show("Invalid email format. Please enter a valid email.");
+                ConfirmButton.IsEnabled = true;
                 return;
             }
 
             if (!isValidUsername)
             {
                 MessageBox.Show("Invalid username format. Username must be 3-10 characters long and cannot contain spaces.");
+                ConfirmButton.IsEnabled = true;
                 return;
             }
 
             if (!isValidPassword)
             {
                 MessageBox.Show("Invalid password format. Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+                ConfirmButton.IsEnabled = true;
                 return;
             }
 
@@ -63,6 +68,8 @@ namespace MessengerUI
             else
             {
                 MessageBox.Show("Registration fail");
+                ConfirmButton.IsEnabled = true;
+                return;
             }
 
             var VerifyBoolean = await AuthService.VerifyEmailAsync(email);
@@ -73,8 +80,9 @@ namespace MessengerUI
                 VerifyEmail verifyEmailWindow = new VerifyEmail();
                 verifyEmailWindow.currentEmail = email;
                 verifyEmailWindow.currentUsername = username;
-                verifyEmailWindow.Show();
-                this.Close();
+                verifyEmailWindow.ShowDialog();
+                ConfirmButton.IsEnabled = true;
+                this.Hide();
             }
         }
 
@@ -82,7 +90,7 @@ namespace MessengerUI
         {
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.Show();
-            this.Close();
+            this.Hide();
         }
     }
 }

@@ -4,6 +4,106 @@
              xmlns:local="clr-namespace:MessengerUI"
              StartupUri="LoginWindow.xaml">
     <Application.Resources>
-         
+        <!--Default style for label-->
+        <Style TargetType="Label">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <!--Default style for large label-->
+        <Style x:Key="LargeLabel" TargetType="Label">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#FFC65C"/>
+            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontWeight" Value="UltraBold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <!--Default style for button-->
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              Background="{TemplateBinding Background}">
+                            <TextBlock Text="{TemplateBinding Content}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#22202f"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Background" Value="#6C6699"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!--Default style for textbox-->
+        <Style TargetType="TextBox">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,2,0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border CornerRadius="10"
+                                Background="#353340">
+                            <Grid>
+                                <Rectangle StrokeThickness="1"/>
+                                <ScrollViewer x:Name="PART_ContentHost"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Foreground="#CFCFCF"
+                                            FontSize="15"
+                                            FontWeight="Bold"
+                                            VerticalScrollBarVisibility="Disabled"
+                                            HorizontalScrollBarVisibility="Disabled"
+                                            Margin="10,0,10,0"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!-- Set default foreground for when user types -->
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <!--Default style for passwordbox-->
+        <Style TargetType="PasswordBox">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,2,0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border CornerRadius="10"
+                                Background="#353340">
+                            <Grid>
+                                <Rectangle StrokeThickness="1"/>
+                                <ScrollViewer x:Name="PART_ContentHost"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Foreground="White"
+                                            FontSize="15"
+                                            FontWeight="Bold"
+                                            VerticalScrollBarVisibility="Disabled"
+                                            HorizontalScrollBarVisibility="Disabled"
+                                            Margin="10,0,10,0"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!-- Set default foreground for when user types -->
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
     </Application.Resources>
 </Application>

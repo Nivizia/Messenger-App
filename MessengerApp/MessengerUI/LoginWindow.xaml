@@ -5,23 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerUI"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        Title="LoginWindow" Height="300" Width="600" WindowStartupLocation="CenterScreen" Background="Transparent" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize">
+    <Border Background="#272537" CornerRadius="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Generic chatting application" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0"/>
+            <Label Content="Chatting application" HorizontalAlignment="Center" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Style="{StaticResource LargeLabel}"/>
 
-        <Border Grid.Row="1" Grid.Column="1" Background="LightGray" Margin="5" BorderBrush="#FF888888" BorderThickness="3" CornerRadius="10">
-            <Grid>
+
+            <Grid Grid.Row="1" Grid.Column="1">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -39,7 +40,7 @@
                 </Grid.RowDefinitions>
 
 
-                <TextBlock Text="Login Account" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.ColumnSpan="4" Grid.Column="0"/>
+                <Label Content="Login Account" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.ColumnSpan="4" Grid.Column="0"/>
 
                 <Label Content="Username:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
                 <Label Content="Password:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
@@ -61,11 +62,10 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Button Content="Confirm" Grid.Column="1" Grid.Row="1" Click="LoginButton_Click"/>
+                    <Button x:Name="ConfirmButton" Content="Confirm" Grid.Column="1" Grid.Row="1" Click="LoginButton_Click"/>
                     <Button Content="Register" Grid.Column="3" Grid.Row="1" Click="RegisterButton_Click"/>
                 </Grid>
-
             </Grid>
-        </Border>
-    </Grid>
+        </Grid>
+    </Border>
 </Window>

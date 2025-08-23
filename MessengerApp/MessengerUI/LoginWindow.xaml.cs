@@ -29,6 +29,8 @@ namespace MessengerUI
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmButton.IsEnabled = false;
+
             string Username = UsernameTextBox.Text.Trim();
             string Password = PasswordBox.Password.Trim();
 
@@ -41,12 +43,14 @@ namespace MessengerUI
             if (!isValidUsername)
             {
                 MessageBox.Show("Invalid username format. Username must be 3-10 characters long and cannot contain spaces.");
+                ConfirmButton.IsEnabled = true;
                 return;
             }
 
             if (!isValidPassword)
             {
                 MessageBox.Show("Invalid password format. Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+                ConfirmButton.IsEnabled = true;
                 return;
             }
 
@@ -61,7 +65,9 @@ namespace MessengerUI
                 byte[] encryptedToken = ProtectedData.Protect(tokenBytes, null, DataProtectionScope.CurrentUser);
 
                 File.WriteAllBytes("auth.token", encryptedToken);
-                
+
+                ConfirmButton.IsEnabled = true;
+
                 ContactWindow contactWindow = new ContactWindow();
                 contactWindow.Username = Username;
                 contactWindow.Show();
@@ -70,6 +76,7 @@ namespace MessengerUI
             else
             {
                 MessageBox.Show("Login failed. Please check your username and password.");
+                ConfirmButton.IsEnabled = true;
             }
         }
 
