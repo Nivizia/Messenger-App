@@ -86,5 +86,11 @@ namespace MessengerUI
             mainWindow.Show();
             this.Hide();
         }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Application is closing.");
+            Application.Current.Shutdown();
+        }
     }
 }

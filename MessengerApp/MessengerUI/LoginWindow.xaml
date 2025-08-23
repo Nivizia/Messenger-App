@@ -19,6 +19,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <Button Content="X" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseButton_Click" Style="{StaticResource CloseButtonStyle}"/>
+
+
             <Label Content="Chatting application" HorizontalAlignment="Center" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Style="{StaticResource LargeLabel}"/>
 
 
