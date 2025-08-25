@@ -5,13 +5,15 @@ namespace ConsoleAppTest
     {
         static async Task Main(string[] args)
         {
-            string username = "", email = "", password = "" ;
+            string username = "", email = "", password = "";
             string currentEmail = "", code = "";
 
 
 
             // lập trình đa luồng - xử lí bất đồng bộ trong C# :
             //https://viblo.asia/p/lap-trinh-bat-dong-bo-trong-c-DZrGNDoWkVB
+            //rong C#, async và await là hai từ khóa được sử dụng để đơn giản hóa việc viết code bất đồng bộ,
+            //giúp tránh tình trạng block (treo) giao diện người dùng hoặc các luồng khác trong khi chờ một tác vụ dài hạn hoàn thành. 
 
 
 
@@ -41,11 +43,17 @@ namespace ConsoleAppTest
             var ConfirmVerifyBoolean = await AuthService.ConfirmEmailAsync(currentEmail, code);
             // trả true hoặc false | điều kiện thì như ở trên
             //-------------------------------------------------------------------------
+            //-------------------------[ hàm lấy tất cả user trả về object]-----------
+            var token2 = "your_token_here";
+            var _servive = new ChatService();
 
+            var users = await ChatService.GetUsersAsync(token);
 
-            Console.WriteLine(token);
-
-
+            foreach (var user in users)
+            {
+                Console.WriteLine($"{user.username} - {user.email} - Role: {user.role_id}");
+            }
+            //--------------------------------------------------------------------------
         }
     }
 }
