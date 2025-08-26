@@ -249,3 +249,4 @@ StyleCop.Cache
 bin
 obj
 /MessengerApp/.vs
+/test
