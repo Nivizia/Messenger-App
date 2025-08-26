@@ -5,34 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerUI"
         mc:Ignorable="d"
-        Title="ChattingWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
+        Title="Chat Window" Height="600" Width="800" Loaded="Window_Loaded">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="8*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!--Chatter username section-->
-        <Label x:Name="ChattingUserName" Content="ChattingUserPlaceHolder" Grid.Row="0" Grid.Column="0"/>
-        
-        <!--Chat history section-->
+        <!-- Header Section -->
+        <Border Grid.Row="0" Background="LightBlue" Padding="10" Margin="0,0,0,10" CornerRadius="5">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="ChattingUserName" Text="Chat with: [Loading...]" FontSize="16" FontWeight="Bold"/>
+                <Button x:Name="RefreshMessagesButton" Content="Refresh" Width="80" Height="25"
+                        HorizontalAlignment="Right" Margin="10,0,0,0" Click="RefreshMessagesButton_Click"/>
+            </StackPanel>
+        </Border>
 
-        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Margin="10">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel x:Name="ChatHistoryPanel">
+        <!-- Chat History Section -->
+        <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="0,0,0,10">
+            <ScrollViewer x:Name="ChatScrollViewer" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="ChatHistoryPanel" Margin="10">
                     <!-- Chat messages will be added here dynamically -->
                 </StackPanel>
             </ScrollViewer>
         </Border>
 
-        <!--Message input section-->
-        <TextBox x:Name="MessageInput" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" Height="50" VerticalAlignment="Center"/>
+        <!-- Message Input Section -->
+        <Grid Grid.Row="2" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="MessageInput" Grid.Column="0" Height="40" VerticalContentAlignment="Center"
+                     Margin="0,0,10,0" KeyDown="MessageInput_KeyDown"
+                     TextWrapping="Wrap" AcceptsReturn="False"/>
+            <Button x:Name="SendButton" Grid.Column="1" Content="Send" Width="80" Height="40"
+                    Click="SendButton_Click"/>
+        </Grid>
+
+        <!-- Status Section -->
+        <StackPanel Grid.Row="3">
+            <TextBlock x:Name="StatusLabel" Text="Ready" Foreground="Green" FontStyle="Italic"/>
+        </StackPanel>
 
     </Grid>
 </Window>
