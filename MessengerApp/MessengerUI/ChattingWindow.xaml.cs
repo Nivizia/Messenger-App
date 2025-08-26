@@ -19,6 +19,10 @@ namespace MessengerUI
     /// </summary>
     public partial class ChattingWindow : Window
     {
+        public string ConversationId { get; set; } = string.Empty;
+        public string CurrentToken { get; set; } = string.Empty;
+        public string ChatPartnerName { get; set; } = string.Empty;
+
         public ChattingWindow()
         {
             InitializeComponent();

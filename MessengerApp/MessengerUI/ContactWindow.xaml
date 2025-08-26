@@ -5,20 +5,69 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerUI"
         mc:Ignorable="d"
-        Title="ContactWindow" Height="450" Width="800" Loaded="Window_Loaded">
-    <Grid>
+        Title="Contacts - Messenger App" Height="600" Width="400" Loaded="Window_Loaded">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
 
         <!-- Header Section -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0">
-            <TextBlock Text="UsernamePlaceholder" x:Name="UsernamePlaceholder"></TextBlock>
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="Welcome back!" FontSize="16" FontWeight="Bold"/>
+            <TextBlock x:Name="UsernamePlaceholder" Text="UsernamePlaceholder" FontSize="14" Foreground="Gray"/>
+        </StackPanel>
+
+        <!-- Search Section -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,10">
+            <TextBlock Text="Search Users:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="SearchTextBox" Grid.Column="0" Height="30" VerticalContentAlignment="Center"
+                         TextChanged="SearchTextBox_TextChanged" Margin="0,0,5,0"/>
+                <Button x:Name="SearchButton" Grid.Column="1" Content="Search" Height="30" Width="60"
+                        Click="SearchButton_Click"/>
+            </Grid>
+        </StackPanel>
+
+        <!-- Actions Section -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button x:Name="LoadAllUsersButton" Content="Load All Users" Height="30" Width="100"
+                    Click="LoadAllUsersButton_Click" Margin="0,0,5,0"/>
+            <Button x:Name="RefreshButton" Content="Refresh" Height="30" Width="60"
+                    Click="RefreshButton_Click"/>
+        </StackPanel>
+
+        <!-- User List Section -->
+        <Border Grid.Row="3" BorderBrush="Gray" BorderThickness="1" Margin="0,0,0,10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ListBox x:Name="UserListBox" SelectionMode="Single"
+                         MouseDoubleClick="UserListBox_MouseDoubleClick"
+                         SelectionChanged="UserListBox_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="{Binding username}" FontWeight="Bold" Width="100"/>
+                                <TextBlock Text="{Binding email}" Foreground="Gray" Width="150"/>
+                                <TextBlock Text="{Binding is_active, StringFormat='Active: {0}'}" Width="80"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Status Section -->
+        <StackPanel Grid.Row="4">
+            <TextBlock x:Name="StatusLabel" Text="Ready" Foreground="Green" FontStyle="Italic"/>
+            <Button x:Name="StartChatButton" Content="Start Chat with Selected User" Height="35"
+                    Click="StartChatButton_Click" IsEnabled="False" Margin="0,5,0,0"/>
         </StackPanel>
     </Grid>
 </Window>
