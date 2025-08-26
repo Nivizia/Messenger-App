@@ -58,12 +58,16 @@ namespace MessengerUI
                 {
                     StatusLabel.Text = "No token found. Please login again.";
                     StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    MessageBox.Show("Authentication token not found. Please login again.", "Authentication Required",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)
             {
                 StatusLabel.Text = $"Error loading token: {ex.Message}";
                 StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                MessageBox.Show($"Error loading authentication token: {ex.Message}", "Authentication Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -164,6 +168,13 @@ namespace MessengerUI
         {
             if (UserListBox.SelectedItem is UserDto selectedUser)
             {
+                // Validate token
+                if (string.IsNullOrEmpty(currentToken))
+                {
+                    MessageBox.Show("No authentication token available. Please login again.", "Authentication Required",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 try
                 {
                     StatusLabel.Text = "Creating conversation...";
@@ -181,6 +192,7 @@ namespace MessengerUI
                         chatWindow.ConversationId = conversationId;
                         chatWindow.CurrentToken = currentToken;
                         chatWindow.ChatPartnerName = selectedUser.username;
+                        chatWindow.Owner = this; // Set parent window
                         chatWindow.Show();
 
                         StatusLabel.Text = "Chat window opened";

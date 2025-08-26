@@ -34,6 +34,7 @@ namespace MessengerUI
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ChattingUserName.Text = $"Chat with: {ChatPartnerName}";
+            this.Title = $"Chat - {ChatPartnerName}";
             await LoadMessages();
         }
 
@@ -94,8 +95,10 @@ namespace MessengerUI
                     MaxWidth = 400
                 };
 
-                // Determine if message is from current user (this is a simplified check)
-                bool isOwnMessage = message.sender_id != "other_user"; // TODO: Implement proper user ID checking
+                // Determine if message is from current user (simplified check)
+                // In real implementation, compare with actual current user ID
+                bool isOwnMessage = message.sender_id == "current_user" ||
+                                  message.created_at > DateTime.Now.AddMinutes(-1); // Recent messages assumed to be own
 
                 if (isOwnMessage)
                 {
@@ -222,6 +225,11 @@ namespace MessengerUI
         private async void RefreshMessagesButton_Click(object sender, RoutedEventArgs e)
         {
             await LoadMessages();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

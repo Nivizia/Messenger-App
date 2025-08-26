@@ -16,11 +16,20 @@
 
         <!-- Header Section -->
         <Border Grid.Row="0" Background="LightBlue" Padding="10" Margin="0,0,0,10" CornerRadius="5">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="ChattingUserName" Text="Chat with: [Loading...]" FontSize="16" FontWeight="Bold"/>
-                <Button x:Name="RefreshMessagesButton" Content="Refresh" Width="80" Height="25"
-                        HorizontalAlignment="Right" Margin="10,0,0,0" Click="RefreshMessagesButton_Click"/>
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="BackButton" Grid.Column="0" Content="← Back" Width="80" Height="25"
+                        Margin="0,0,10,0" Click="BackButton_Click"/>
+                <TextBlock x:Name="ChattingUserName" Grid.Column="1" Text="Chat with: [Loading...]"
+                           FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Button x:Name="RefreshMessagesButton" Grid.Column="2" Content="Refresh" Width="80" Height="25"
+                        Click="RefreshMessagesButton_Click"/>
+            </Grid>
         </Border>
 
         <!-- Chat History Section -->
