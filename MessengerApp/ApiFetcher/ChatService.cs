@@ -155,6 +155,43 @@ namespace ApiFetcher
                 : null;
         }
 
+        // TODO: Replace with real API when available
+        // Placeholder method for sending messages - your friend can replace this implementation
+        public static async Task<bool> SendMessageAsync(string token, string conversationId, string content)
+        {
+            // PLACEHOLDER IMPLEMENTATION
+            // This simulates the API call that your friend will implement
+            // For now, we just simulate a successful send after a short delay
+
+            try
+            {
+                // Simulate network delay
+                await Task.Delay(500);
+
+                // TODO: Replace this entire method body with real API call:
+                // string url = "https://api.mmb.io.vn/py/api/chatbox/send-message";
+                // var payload = new { conversation_id = conversationId, content = content };
+                // var jsonContent = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+                // using var request = new HttpRequestMessage(HttpMethod.Post, url);
+                // request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                // request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // request.Content = jsonContent;
+                // using var response = await _httpClient.SendAsync(request);
+                // response.EnsureSuccessStatusCode();
+                // var json = await response.Content.ReadAsStringAsync();
+                // var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json, options);
+                // return apiResponse?.success ?? false;
+
+                // For now, always return true to simulate successful sending
+                return true;
+            }
+            catch (Exception)
+            {
+                // In case of any error, return false
+                return false;
+            }
+        }
+
     }
 
 

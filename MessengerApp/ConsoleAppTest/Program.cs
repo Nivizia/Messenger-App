@@ -62,6 +62,13 @@ namespace ConsoleAppTest
             //sau khi có phòng chat rồi thì load các tin nhắn cũ
             List<MessageDto>? messages = await ChatService.GetMessagesAsync(token, conversationId);
 
+            //------------------------------[gửi tin nhắn - PLACEHOLDER]
+            // Gửi tin nhắn (hiện tại là placeholder, sẽ được thay thế bằng API thật)
+            string messageContent = "Hello, this is a test message!";
+            bool sendResult = await ChatService.SendMessageAsync(token, conversationId, messageContent);
+            // trả true nếu gửi thành công, false nếu thất bại
+            //--------------------------------------------------------------------------
+
             // chức năng chat trực tiếp hiện vẫn còn đang dev, dự kiến nối nay xong
 
         }
