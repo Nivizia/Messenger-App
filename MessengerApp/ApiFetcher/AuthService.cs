@@ -83,8 +83,6 @@ namespace ApiFetcher
                     return successProp.GetBoolean();
                 }
             }
-            var error = JsonDocument.Parse(json).RootElement.GetProperty("error").GetString();
-            Console.WriteLine(error);
 
             return false; // đăng ký thất bại
         }
