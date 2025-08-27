@@ -5,8 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessengerUI"
         mc:Ignorable="d"
-        Title="Contacts - Messenger App" Height="600" Width="400" Loaded="Window_Loaded">
-    <Grid Margin="10">
+        Title="Contacts - Messenger App" Height="600" Width="450"
+        WindowStartupLocation="CenterScreen"
+        Background="#272537" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <!-- Custom button style for logout -->
+        <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#FF5C5C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E04848"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Background" Value="#FF5C5C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Custom search textbox style -->
+        <Style x:Key="SearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Background" Value="#353340"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFC65C"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -16,69 +43,138 @@
         </Grid.RowDefinitions>
 
         <!-- Header Section -->
-        <Grid Grid.Row="0" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0">
-                <TextBlock Text="Welcome back!" FontSize="16" FontWeight="Bold"/>
-                <TextBlock x:Name="UsernamePlaceholder" Text="UsernamePlaceholder" FontSize="14" Foreground="Gray"/>
-            </StackPanel>
-
-            <Button x:Name="LogoutButton" Grid.Column="1" Content="Logout" Width="80" Height="30"
-                    VerticalAlignment="Top" Click="LogoutButton_Click"
-                    Background="LightCoral" Foreground="White"/>
-        </Grid>
-
-        <!-- Search Section -->
-        <StackPanel Grid.Row="1" Margin="0,0,0,10">
-            <TextBlock Text="Search Users:" FontWeight="Bold" Margin="0,0,0,5"/>
+        <Border Grid.Row="0"
+                Background="#353340"
+                CornerRadius="10"
+                Padding="15,10"
+                Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="SearchTextBox" Grid.Column="0" Height="30" VerticalContentAlignment="Center"
-                         TextChanged="SearchTextBox_TextChanged" Margin="0,0,5,0"/>
-                <Button x:Name="SearchButton" Grid.Column="1" Content="Search" Height="30" Width="60"
-                        Click="SearchButton_Click"/>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Welcome back!" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock x:Name="UsernamePlaceholder" Text="UsernamePlaceholder" FontSize="14" Foreground="#FFC65C"/>
+                </StackPanel>
+
+                <Button x:Name="LogoutButton" Grid.Column="1" Content="Logout" Width="80" Height="30"
+                        VerticalAlignment="Center" Click="LogoutButton_Click"
+                        Style="{StaticResource LogoutButtonStyle}"/>
             </Grid>
-        </StackPanel>
+        </Border>
+
+        <!-- Search Section -->
+        <Border Grid.Row="1"
+                Background="#353340"
+                CornerRadius="10"
+                Padding="15,10"
+                Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock Text="Search Users:" FontWeight="Bold" Margin="0,0,0,8" Foreground="White"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="SearchTextBox" Grid.Column="0" Height="35"
+                             Style="{StaticResource SearchTextBoxStyle}"
+                             TextChanged="SearchTextBox_TextChanged" Margin="0,0,10,0"/>
+                    <Button x:Name="SearchButton" Grid.Column="1" Content="Search" Height="35" Width="70"
+                            Click="SearchButton_Click"/>
+                </Grid>
+            </StackPanel>
+        </Border>
 
         <!-- Actions Section -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
-            <Button x:Name="LoadAllUsersButton" Content="Load All Users" Height="30" Width="100"
-                    Click="LoadAllUsersButton_Click" Margin="0,0,5,0"/>
-            <Button x:Name="RefreshButton" Content="Refresh" Height="30" Width="60"
-                    Click="RefreshButton_Click"/>
-        </StackPanel>
+        <Border Grid.Row="2"
+                Background="#353340"
+                CornerRadius="10"
+                Padding="15,10"
+                Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="LoadAllUsersButton" Content="Load All Users" Height="35" Width="120"
+                        Click="LoadAllUsersButton_Click" Margin="0,0,10,0"/>
+                <Button x:Name="RefreshButton" Content="Refresh" Height="35" Width="80"
+                        Click="RefreshButton_Click"/>
+            </StackPanel>
+        </Border>
 
         <!-- User List Section -->
-        <Border Grid.Row="3" BorderBrush="Gray" BorderThickness="1" Margin="0,0,0,10">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <ListBox x:Name="UserListBox" SelectionMode="Single"
-                         MouseDoubleClick="UserListBox_MouseDoubleClick"
-                         SelectionChanged="UserListBox_SelectionChanged">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="{Binding username}" FontWeight="Bold" Width="100"/>
-                                <TextBlock Text="{Binding email}" Foreground="Gray" Width="150"/>
-                                <TextBlock Text="{Binding is_active, StringFormat='Active: {0}'}" Width="80"/>
+        <Border Grid.Row="3"
+                Background="#353340"
+                CornerRadius="10"
+                Margin="0,0,0,10">
+            <ListBox x:Name="UserListBox" SelectionMode="Single"
+                     MouseDoubleClick="UserListBox_MouseDoubleClick"
+                     SelectionChanged="UserListBox_SelectionChanged"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.CanContentScroll="False"
+                     Margin="10">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="UserBorder"
+                                Background="#6C6699"
+                                CornerRadius="8"
+                                Margin="0,2,0,2"
+                                Padding="12,8">
+                            <StackPanel>
+                                <TextBlock Text="{Binding username}"
+                                           FontWeight="Bold"
+                                           FontSize="14"
+                                           Foreground="White"/>
+                                <TextBlock Text="{Binding email}"
+                                           Foreground="#CFCFCF"
+                                           FontSize="12"
+                                           Margin="0,2,0,0"/>
                             </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </ScrollViewer>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
+                                <Setter TargetName="UserBorder" Property="Background" Value="#FFC65C"/>
+                                <Setter TargetName="UserBorder" Property="BorderBrush" Value="#E6B052"/>
+                                <Setter TargetName="UserBorder" Property="BorderThickness" Value="2"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsMouseOver}" Value="True">
+                                <Setter TargetName="UserBorder" Property="Background" Value="#8A7DB8"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
         </Border>
 
         <!-- Status Section -->
-        <StackPanel Grid.Row="4">
-            <TextBlock x:Name="StatusLabel" Text="Ready" Foreground="Green" FontStyle="Italic"/>
-            <Button x:Name="StartChatButton" Content="Start Chat with Selected User" Height="35"
-                    Click="StartChatButton_Click" IsEnabled="False" Margin="0,5,0,0"/>
-        </StackPanel>
+        <Border Grid.Row="4"
+                Background="#353340"
+                CornerRadius="10"
+                Padding="15,10">
+            <StackPanel>
+                <TextBlock x:Name="StatusLabel" Text="Ready" Foreground="#FFC65C" FontStyle="Italic"
+                           HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                <Button x:Name="StartChatButton" Content="Start Chat with Selected User" Height="40"
+                        Click="StartChatButton_Click" IsEnabled="False"
+                        FontWeight="Bold"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
