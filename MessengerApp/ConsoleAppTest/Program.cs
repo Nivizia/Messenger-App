@@ -1,4 +1,5 @@
 ﻿using ApiFetcher;
+using Microsoft.VisualBasic;
 namespace ConsoleAppTest
 {
     internal class Program
@@ -7,6 +8,8 @@ namespace ConsoleAppTest
         {
             string username = "", email = "", password = "";
             string currentEmail = "", code = "";
+            string searchData = "";
+            //string userId = "";  
 
 
 
@@ -23,12 +26,24 @@ namespace ConsoleAppTest
 
             //------------------------[Hàm login]-----------------------------------
             var token = await AuthService.LoginAsync(username, password);
+            Console.WriteLine("Access token: " + token);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                Console.WriteLine("Login failed or email chưa xác thực.");
+                return;
+            }
+
             // gọi thằng này để truyền vào username và password -> nếu đúng nó sẽ trả token còn sai nó sẽ không trả gì
             // lưu ý : hàm login nếu phát hiện tài khoản chưa xác thực email cũng sẽ từ chối cung cấp token
             //-----------------------------------------------------------------------
 
             //------------------------[hàm Register]---------------------------------
             var RegisterBoolean = await AuthService.RegisterAsync(email, username, password);
+            
+
+
+
             // nhập email, username, password -> trả true hoặc false, khi áp dụng nhờ bắt validation cơ bản
             //-------------------------------------------------------------------------
             //------------------------[gửi yêu cầu xác thực email]---------------------
@@ -44,8 +59,9 @@ namespace ConsoleAppTest
             // trả true hoặc false | điều kiện thì như ở trên
             //-------------------------------------------------------------------------
             //-------------------------[ hàm lấy tất cả user trả về object]-----------
-            var token2 = "your_token_here";
+            //var token2 = "your_token_here";
             var _servive = new ChatService();
+            Console.WriteLine("\nAll Users:");
 
             var users = await ChatService.GetUsersAsync(token);
 
@@ -56,9 +72,40 @@ namespace ConsoleAppTest
             //--------------------------------------------------------------------------
             //------------------------------[các service liên quan tới conversation và tin nhắn]
             //search người dùng (theo username hoặc email)
-            List<UserDto> users = await ChatService.SearchUsersAsync(token, searchData);
+         var  searchUsers = await ChatService.SearchUsersAsync(token, searchData);
+            
+
+            if (searchUsers.Count == 0)
+            {
+                Console.WriteLine("No user found.");
+                return;
+            }
+
+            foreach (var user in searchUsers)
+            {
+                Console.WriteLine($"{user.username} - {user.email} - ID: {user._id}");
+            }
+
+            //----------------- [Tạo conversation + Lấy message]----------
+            var userId = searchUsers[0]._id; // lấy user đầu tiên
+            var conversationIds = await ChatService.CreateConversationAsync(token, userId);
+
+            if (conversationIds == null || !conversationIds.Any())
+            {
+                Console.WriteLine("Không tạo được phòng chat.");
+                return;
+            }
+
+
             //data có trả id user dùng nó để tạo phòng chat
-            string? conversationId = await ChatService.CreateConversationAsync(token, userId);
+            //string? conversationId = await ChatService.CreateConversationAsync(token, userId);
+
+            //List<string> conversationIds = await ChatService.CreateConversationAsync(token, userId);
+            //string conversationId = conversationIds.FirstOrDefault(); // Lấy 1 ID đầu tiên nếu có
+
+            string conversationId = conversationIds.First();
+            Console.WriteLine($"\nConversation ID created: {conversationId}");
+
             //sau khi có phòng chat rồi thì load các tin nhắn cũ
             List<MessageDto>? messages = await ChatService.GetMessagesAsync(token, conversationId);
 

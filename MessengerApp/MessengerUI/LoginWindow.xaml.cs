@@ -58,7 +58,7 @@ namespace MessengerUI
 
             if (token != null)
             {
-                MessageBox.Show("Login successful: " + token);
+                MessageBox.Show("Login successful: " + Username);
 
                 // Encrypt and save token
                 byte[] tokenBytes = Encoding.UTF8.GetBytes(token);
@@ -70,6 +70,7 @@ namespace MessengerUI
 
                 ContactWindow contactWindow = new ContactWindow();
                 contactWindow.Username = Username;
+                contactWindow.token = token;
                 contactWindow.Show();
                 this.Close();
             }

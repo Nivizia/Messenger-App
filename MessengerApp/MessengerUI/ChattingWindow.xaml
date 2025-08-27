@@ -7,32 +7,30 @@
         mc:Ignorable="d"
         Title="ChattingWindow" Height="450" Width="800">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="8*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!--Chatter username section-->
-        <Label x:Name="ChattingUserName" Content="ChattingUserPlaceHolder" Grid.Row="0" Grid.Column="0"/>
-        
-        <!--Chat history section-->
+        <!-- Hiển thị thông tin user -->
+        <TextBlock x:Name="UserInfoText" 
+                   Grid.Row="0" 
+                   FontWeight="Bold" 
+                   Margin="10"/>
 
-        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Margin="10">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel x:Name="ChatHistoryPanel">
-                    <!-- Chat messages will be added here dynamically -->
-                </StackPanel>
-            </ScrollViewer>
-        </Border>
+        <!-- Danh sách tin nhắn -->
+        <ScrollViewer x:Name="SvMessages" Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="5">
+            <StackPanel x:Name="MessagesPanel" />
+        </ScrollViewer>
 
-        <!--Message input section-->
-        <TextBox x:Name="MessageInput" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" Height="50" VerticalAlignment="Center"/>
+        <!-- Ô nhập và gửi -->
+        <DockPanel Grid.Row="2" Margin="5">
+            <TextBox x:Name="MessageInput" Width="450" Height="30" Margin="0,0,5,0"/>
+            <Button Content="Gửi" Width="80" Click="SendMessage_Click"/>
+        </DockPanel>
+   
 
     </Grid>
 </Window>

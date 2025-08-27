@@ -3,22 +3,251 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MessengerUI"
+         xmlns:local="clr-namespace:MessengerUI"
         mc:Ignorable="d"
-        Title="ContactWindow" Height="450" Width="800" Loaded="Window_Loaded">
-    <Grid>
+        Title="Contacts" Height="650" Width="1300">
+
+    <!-- ENTER = Search -->
+    <Window.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+    </Window.InputBindings>
+
+    <!-- ========= LAYOUT ========= -->
+    <!-- Lưu ý: các Resource như CosmicBg / GlassCard / NeonButton / TextPrimary / TextSecondary / AccentCyan / ListItemStyle
+         đã được bạn đưa vào App.xaml (main). Ở đây mình chỉ dùng. -->
+    <Grid Background="{StaticResource CosmicBg}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="72"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <!-- Recent -->
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <!-- Search results -->
         </Grid.ColumnDefinitions>
 
-        <!-- Header Section -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0">
-            <TextBlock Text="UsernamePlaceholder" x:Name="UsernamePlaceholder"></TextBlock>
-        </StackPanel>
+        <!-- HEADER -->
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Padding="16"
+                Background="#0E1328" BorderBrush="#1B2140" BorderThickness="0,0,0,1">
+            <DockPanel LastChildFill="False">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <TextBlock Text="HOLO" Foreground="{StaticResource AccentCyan}" FontWeight="Bold" FontSize="20" Margin="0,0,6,0"/>
+                    <TextBlock Text="NET"  Foreground="{StaticResource TextPrimary}" FontWeight="Bold" FontSize="20"/>
+                    <TextBlock Text="  |  Recent Chats" Foreground="{StaticResource TextSecondary}" FontSize="14" Margin="10,4,0,0"/>
+                </StackPanel>
+
+                <!-- 1 ô tìm kiếm duy nhất -->
+                <DockPanel DockPanel.Dock="Right">
+                    <TextBox x:Name="TxtGlobalSearch"
+                             Width="360" Height="34" Padding="10"
+                             Background="#0B1020"
+                             Foreground="{StaticResource TextPrimary}"
+                             BorderBrush="#223"
+                               Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Search by username or email"/>
+                    <Button Content="Search"
+                            Style="{StaticResource NeonButton}"
+                            Height="34"
+                            Command="{Binding SearchCommand}"
+                            Click="SearchButton_Click" />
+                </DockPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- RECENT CHATS (LEFT) -->
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource GlassCard}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel>
+                    <TextBlock Text="Recent Chats"
+                               Foreground="{StaticResource TextPrimary}"
+                               FontWeight="SemiBold" FontSize="16"
+                               DockPanel.Dock="Left"/>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <Button Content="Refresh" Style="{StaticResource NeonButton}"
+                                Command="{Binding RefreshCommand}"/>
+                    </StackPanel>
+                </DockPanel>
+
+                <ListView Grid.Row="1"
+                          x:Name="LvRecent"
+                          BorderThickness="0"
+                           ItemsSource="{Binding Recent}"
+                          Foreground="{StaticResource TextPrimary}"
+                          ItemContainerStyle="{StaticResource ListItemStyle}"
+                          ScrollViewer.CanContentScroll="True"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling"
+                            MouseDoubleClick="LvRecent_MouseDoubleClick">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+
+                    <!-- ITEM MẪU 1 -->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="44"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Avatar -->
+                                <Ellipse Width="36" Height="36" VerticalAlignment="Center">
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush>
+                                            <GradientStop Color="#556" Offset="0"/>
+                                            <GradientStop Color="#223" Offset="1"/>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <!-- Name + Last msg -->
+                                <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                    <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding LastMessage}" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                </StackPanel>
+                                <!-- Time + Unread -->
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding LastAt, StringFormat={}{0:HH:mm}}"
+                         Foreground="{StaticResource TextSecondary}" FontSize="12"
+                         HorizontalAlignment="Right"/>
+                                    <Border CornerRadius="10" Padding="6,2" Margin="0,6,0,0"
+                      Background="{StaticResource AccentCyan}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Unread}" Value="0">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding Unread}" Foreground="#0B1020"
+                           FontWeight="Bold" FontSize="12"/>
+
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Border>
+
+        <!-- SEARCH RESULTS (RIGHT) -->
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource GlassCard}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Search Results (Username / Email)"
+                           Foreground="{StaticResource TextPrimary}"
+                           FontWeight="SemiBold" FontSize="16"/>
+
+                <ListView Grid.Row="1"
+                          x:Name="LvSearch"
+                           ItemsSource="{Binding SearchResults}"
+                          BorderThickness="0"
+                          Foreground="{StaticResource TextPrimary}"
+                          
+                          ScrollViewer.CanContentScroll="True"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling"
+                              MouseDoubleClick="LvSearch_MouseDoubleClick">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ListItemStyle}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Margin" Value="8,8,8,0"/>
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0"
+                    Padding="10"
+                    CornerRadius="10"
+                    Background="#0F152C"
+                    BorderBrush="#1B2140"
+                    BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="44"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Width="36" Height="36" VerticalAlignment="Center">
+                                        <Ellipse.Fill>
+                                            <RadialGradientBrush>
+                                                <GradientStop Color="#445" Offset="0"/>
+                                                <GradientStop Color="#223" Offset="1"/>
+                                            </RadialGradientBrush>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+
+                                    <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                        <TextBlock Text="{Binding username, TargetNullValue=-}" FontWeight="SemiBold"/>
+
+                                        <TextBlock Text="{Binding email, TargetNullValue=-}" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                    </StackPanel>
+
+                                  
+
+                                    <!-- NEW pill + Message -->
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <!-- NEW pill: chỉ hiện khi ConversationId null/empty -->
+                                        <Border CornerRadius="8" Padding="6,2" Margin="0,0,8,0">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#2AF" Offset="0"/>
+                                                    <GradientStop Color="#58F" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        
+                                                        <DataTrigger Binding="{Binding ConversationId}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ConversationId}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="NEW" Foreground="#0B1020" FontWeight="Bold" FontSize="12"/>
+                                        </Border>
+
+                                        <Button Content="Message" Style="{StaticResource NeonButton}"
+                                                 Click="MessageButton_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Border>
     </Grid>
 </Window>
+
+
