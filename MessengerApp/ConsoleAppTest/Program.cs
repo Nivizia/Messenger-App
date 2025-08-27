@@ -5,8 +5,8 @@ namespace ConsoleAppTest
     {
         static async Task Main(string[] args)
         {
-            string username = "", email = "", password = "";
-            string currentEmail = "", code = "";
+            string username = "", email = "", password = "", conversationId="";
+            string currentEmail = "", code = "", searchData="", userId="";
 
 
 
@@ -56,18 +56,11 @@ namespace ConsoleAppTest
             //--------------------------------------------------------------------------
             //------------------------------[các service liên quan tới conversation và tin nhắn]
             //search người dùng (theo username hoặc email)
-            //List<UserDto> users = await ChatService.SearchUsersAsync(token, searchData);
-            ////data có trả id user dùng nó để tạo phòng chat
-            //string? conversationId = await ChatService.CreateConversationAsync(token, userId);
-            ////sau khi có phòng chat rồi thì load các tin nhắn cũ
-            //List<MessageDto>? messages = await ChatService.GetMessagesAsync(token, conversationId);
-
-            //------------------------------[gửi tin nhắn - PLACEHOLDER]
-            // Gửi tin nhắn (hiện tại là placeholder, sẽ được thay thế bằng API thật)
-            string messageContent = "Hello, this is a test message!";
-            //bool sendResult = await ChatService.SendMessageAsync(token, conversationId, messageContent);
-            // trả true nếu gửi thành công, false nếu thất bại
-            //--------------------------------------------------------------------------
+            List<UserDto> list_users = await ChatService.SearchUsersAsync(token, searchData);
+            //data có trả id user dùng nó để tạo phòng chat
+            List<string>? _conversationId = await ChatService.CreateConversationAsync(token, userId);
+            //sau khi có phòng chat rồi thì load các tin nhắn cũ
+            List<MessageDto>? messages = await ChatService.GetMessagesAsync(token, conversationId);
 
             // chức năng chat trực tiếp hiện vẫn còn đang dev, dự kiến nối nay xong
 

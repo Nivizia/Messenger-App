@@ -34,7 +34,7 @@ namespace MessengerUI
             string Username = UsernameTextBox.Text.Trim();
             string Password = PasswordBox.Password.Trim();
 
-            string UsernamePattern = @"^[^\s]{3,10}$";
+            string UsernamePattern = @"^[^\s]{3,20}$";
             string PasswordPattern = @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$";
 
             bool isValidUsername = System.Text.RegularExpressions.Regex.IsMatch(Username, UsernamePattern);
@@ -42,7 +42,7 @@ namespace MessengerUI
 
             if (!isValidUsername)
             {
-                MessageBox.Show("Invalid username format. Username must be 3-10 characters long and cannot contain spaces.");
+                MessageBox.Show("Invalid username format. Username must be 3-20 characters long and cannot contain spaces.");
                 ConfirmButton.IsEnabled = true;
                 return;
             }
