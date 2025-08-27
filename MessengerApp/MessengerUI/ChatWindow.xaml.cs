@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MessengerUI
@@ -62,11 +64,11 @@ namespace MessengerUI
                 var res2 = await client.GetStringAsync($"{API_BASE}/api/chatboxconversation/user/{otherId}");
                 var other = JObject.Parse(res2);
 
-                partnerName = other["data"]?[0]?.ToString() ?? "Người khác";
+                partnerName = other["data"]?[0]?.ToString() ?? "Unknown User";
 
                 Dispatcher.Invoke(() =>
                 {
-                    UserInfoText.Text = $"Bạn: {myName} — Đối phương: {partnerName}";
+                    UserInfoText.Text = partnerName;
                 });
             }
         }
@@ -128,6 +130,20 @@ namespace MessengerUI
 
         private async void SendMessage_Click(object sender, RoutedEventArgs e)
         {
+            await SendMessage();
+        }
+
+        private void MessageInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && !Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                e.Handled = true; // Prevent the Enter from being processed by the TextBox
+                _ = SendMessage(); // Send the message
+            }
+        }
+
+        private async Task SendMessage()
+        {
             string text = MessageInput.Text.Trim();
             if (string.IsNullOrEmpty(text)) return;
 
@@ -137,22 +153,80 @@ namespace MessengerUI
             await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
 
             MessageInput.Text = "";
+            MessageInput.Focus(); // Keep focus on input after sending
+
+            // Auto-scroll to bottom
+            MessagesScrollViewer.ScrollToEnd();
         }
 
         private void AppendMessage(string sender, string text, bool isMine)
         {
-            var msgBlock = new TextBlock
+            // Create message container
+            var messageContainer = new Grid
             {
-                Text = $"{sender}: {text}",
-                Margin = new Thickness(5),
-                HorizontalAlignment = isMine ? HorizontalAlignment.Right : HorizontalAlignment.Left,
-                Background = isMine ? System.Windows.Media.Brushes.LightBlue : System.Windows.Media.Brushes.LightGray,
-                Padding = new Thickness(8),
-                TextWrapping = TextWrapping.Wrap,
-                MaxWidth = 300
+                Margin = new Thickness(0, 3, 0, 3)
             };
 
-            MessagesPanel.Children.Add(msgBlock);
+            messageContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            messageContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            // Create message bubble
+            var messageBorder = new Border
+            {
+                CornerRadius = new CornerRadius(10),
+                Padding = new Thickness(10, 6, 10, 6),
+                MaxWidth = 350,
+                HorizontalAlignment = isMine ? HorizontalAlignment.Right : HorizontalAlignment.Left,
+                Background = isMine ?
+                    new SolidColorBrush(Color.FromRgb(255, 198, 92)) : // #FFC65C - App accent color for sent messages
+                    new SolidColorBrush(Color.FromRgb(108, 102, 153)), // #6C6699 - App button color for received messages
+                Margin = isMine ? new Thickness(40, 0, 0, 0) : new Thickness(0, 0, 40, 0)
+            };
+
+            // Create message content stack
+            var messageStack = new StackPanel();
+
+            // Sender name (only show for received messages)
+            if (!isMine)
+            {
+                var senderText = new TextBlock
+                {
+                    Text = sender,
+                    FontSize = 11,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = Brushes.White,
+                    Margin = new Thickness(0, 0, 0, 2)
+                };
+                messageStack.Children.Add(senderText);
+            }
+
+            // Message text
+            var messageText = new TextBlock
+            {
+                Text = text,
+                TextWrapping = TextWrapping.Wrap,
+                FontSize = 14,
+                FontWeight = FontWeights.Normal,
+                Foreground = isMine ?
+                    new SolidColorBrush(Color.FromRgb(39, 37, 55)) : // Dark text on light background (sent)
+                    Brushes.White, // White text on dark background (received)
+                LineHeight = 16
+            };
+            messageStack.Children.Add(messageText);
+
+            messageBorder.Child = messageStack;
+
+            // Position the message bubble
+            Grid.SetColumn(messageBorder, isMine ? 1 : 0);
+            messageContainer.Children.Add(messageBorder);
+
+            MessagesPanel.Children.Add(messageContainer);
+
+            // Auto-scroll to bottom
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                MessagesScrollViewer.ScrollToEnd();
+            }), System.Windows.Threading.DispatcherPriority.Background);
         }
     }
 }
