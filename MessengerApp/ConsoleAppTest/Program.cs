@@ -64,6 +64,11 @@ namespace ConsoleAppTest
 
             // chức năng chat trực tiếp hiện vẫn còn đang dev, dự kiến nối nay xong
 
+            //-----------------------------[chức năng bổ sung truyền token lấy userid]-----
+            String? user_id = await UserService.GetUserIdAsync(token);
+            //trả về id của user hiện tại đang đăng nhập khi truyền token đúng
+            //------------------------------------------------------------------------------
+
         }
     }
 }
