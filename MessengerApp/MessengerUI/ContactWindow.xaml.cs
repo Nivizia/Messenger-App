@@ -26,6 +26,7 @@ namespace MessengerUI
         private string currentToken = string.Empty;
         private List<UserDto> allUsers = new List<UserDto>();
         private List<UserDto> filteredUsers = new List<UserDto>();
+        private UserDto? currentUser = null; // Store current user info for chat
 
         public ContactWindow()
         {
@@ -58,7 +59,7 @@ namespace MessengerUI
                 }
 
                 // Use the service token approach to get current user info
-                var currentUser = await ChatService.GetCurrentUserAsync(currentToken);
+                currentUser = await ChatService.GetCurrentUserAsync(currentToken);
 
                 if (currentUser != null)
                 {
@@ -206,13 +207,21 @@ namespace MessengerUI
         {
             if (UserListBox.SelectedItem is UserDto selectedUser)
             {
-                // Validate token
+                // Validate token and current user info
                 if (string.IsNullOrEmpty(currentToken))
                 {
                     MessageBox.Show("No authentication token available. Please login again.", "Authentication Required",
                                   MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
+                if (currentUser == null)
+                {
+                    MessageBox.Show("Current user information not available. Please refresh the page.", "User Info Required",
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 try
                 {
                     StatusLabel.Text = "Creating conversation...";
@@ -225,11 +234,13 @@ namespace MessengerUI
                     {
                         string conversationId = conversationResult[0];
 
-                        // Open chat window
-                        ChattingWindow chatWindow = new ChattingWindow();
-                        chatWindow.ConversationId = conversationId;
-                        chatWindow.CurrentToken = currentToken;
-                        chatWindow.ChatPartnerName = selectedUser.username;
+                        // Open ChatWindow instead of ChattingWindow
+                        ChatWindow chatWindow = new ChatWindow(
+                            conversationId: conversationId,
+                            myId: currentUser._id,
+                            myName: currentUser.username,
+                            token: currentToken
+                        );
                         chatWindow.Owner = this; // Set parent window
                         chatWindow.Show();
 
@@ -282,7 +293,7 @@ namespace MessengerUI
                 // Close any open chat windows (child windows)
                 foreach (Window window in Application.Current.Windows)
                 {
-                    if (window is ChattingWindow && window.Owner == this)
+                    if (window is ChatWindow && window.Owner == this)
                     {
                         window.Close();
                     }

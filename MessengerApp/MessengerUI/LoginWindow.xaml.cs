@@ -58,7 +58,7 @@ namespace MessengerUI
 
             if (token != null)
             {
-                MessageBox.Show("Login successful: " + token);
+                MessageBox.Show("Login successful: ");
 
                 // Encrypt and save token
                 byte[] tokenBytes = Encoding.UTF8.GetBytes(token);
