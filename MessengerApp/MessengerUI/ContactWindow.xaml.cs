@@ -24,23 +24,26 @@ namespace MessengerUI
     {
         public string Username = string.Empty;
         private string currentToken = string.Empty;
+        private string currentUserId = string.Empty;
         private List<UserDto> allUsers = new List<UserDto>();
         private List<UserDto> filteredUsers = new List<UserDto>();
-        private UserDto? currentUser = null; // Store current user info for chat
 
         public ContactWindow()
         {
             InitializeComponent();
         }
 
+        public ContactWindow(string username, string token) : this()
+        {
+            Username = username;
+            currentToken = token;
+        }
+
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             UsernamePlaceholder.Text = $"Logged in as: {Username}";
 
-            // Load saved token
-            LoadToken();
-
-            // Load current user info using service token approach
+            // Load current user ID
             await LoadCurrentUser();
 
             // Load all users automatically
@@ -58,21 +61,20 @@ namespace MessengerUI
                     return;
                 }
 
-                // Use the service token approach to get current user info
-                currentUser = await ChatService.GetCurrentUserAsync(currentToken);
+                // Use the new UserService method to get current user ID directly
+                currentUserId = await UserService.GetUserIdAsync(currentToken);
 
-                if (currentUser != null)
+                if (string.IsNullOrEmpty(currentUserId))
                 {
-                    StatusLabel.Text = $"Current user found: {currentUser.username} (ID: {currentUser._id})";
-                    StatusLabel.Foreground = new SolidColorBrush(Colors.Green);
-                    Console.WriteLine($"[DEBUG] Successfully loaded current user: {currentUser.username} (ID: {currentUser._id})");
+                    StatusLabel.Text = "Error: Could not retrieve user ID from token";
+                    StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    Console.WriteLine($"[DEBUG] Failed to get user ID from token");
                     return;
                 }
 
-                // If we still don't have current user info
-                StatusLabel.Text = "Error: Could not find current user. Check your login credentials.";
-                StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
-                Console.WriteLine($"[DEBUG] Failed to load current user for username: {Username}");
+                StatusLabel.Text = $"Current user ID loaded: {currentUserId}";
+                StatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+                Console.WriteLine($"[DEBUG] Successfully loaded current user ID: {currentUserId}");
             }
             catch (Exception ex)
             {
@@ -82,33 +84,7 @@ namespace MessengerUI
             }
         }
 
-        private void LoadToken()
-        {
-            try
-            {
-                if (File.Exists("auth.token"))
-                {
-                    byte[] encryptedToken = File.ReadAllBytes("auth.token");
-                    byte[] tokenBytes = ProtectedData.Unprotect(encryptedToken, null, DataProtectionScope.CurrentUser);
-                    currentToken = Encoding.UTF8.GetString(tokenBytes);
-                    StatusLabel.Text = "Token loaded successfully";
-                }
-                else
-                {
-                    StatusLabel.Text = "No token found. Please login again.";
-                    StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
-                    MessageBox.Show("Authentication token not found. Please login again.", "Authentication Required",
-                                  MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                StatusLabel.Text = $"Error loading token: {ex.Message}";
-                StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
-                MessageBox.Show($"Error loading authentication token: {ex.Message}", "Authentication Error",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+
 
         private async Task LoadAllUsers()
         {
@@ -215,9 +191,9 @@ namespace MessengerUI
                     return;
                 }
 
-                if (currentUser == null)
+                if (string.IsNullOrEmpty(currentUserId))
                 {
-                    MessageBox.Show("Current user information not available. Please refresh the page.", "User Info Required",
+                    MessageBox.Show("Current user ID not available. Please refresh the page.", "User Info Required",
                                   MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -237,8 +213,8 @@ namespace MessengerUI
                         // Open ChatWindow instead of ChattingWindow
                         ChatWindow chatWindow = new ChatWindow(
                             conversationId: conversationId,
-                            myId: currentUser._id,
-                            myName: currentUser.username,
+                            myId: currentUserId,
+                            myName: Username,
                             token: currentToken
                         );
                         chatWindow.Owner = this; // Set parent window

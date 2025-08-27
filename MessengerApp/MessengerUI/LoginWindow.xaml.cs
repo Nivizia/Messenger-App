@@ -60,16 +60,9 @@ namespace MessengerUI
             {
                 MessageBox.Show("Login successful: ");
 
-                // Encrypt and save token
-                byte[] tokenBytes = Encoding.UTF8.GetBytes(token);
-                byte[] encryptedToken = ProtectedData.Protect(tokenBytes, null, DataProtectionScope.CurrentUser);
-
-                File.WriteAllBytes("auth.token", encryptedToken);
-
                 ConfirmButton.IsEnabled = true;
 
-                ContactWindow contactWindow = new ContactWindow();
-                contactWindow.Username = Username;
+                ContactWindow contactWindow = new ContactWindow(Username, token);
                 contactWindow.Show();
                 this.Close();
             }
