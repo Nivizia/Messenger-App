@@ -192,6 +192,93 @@ namespace ApiFetcher
             }
         }
 
+        // Service account token for user lookups (Test123 user)
+        private static readonly string SERVICE_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlc3QxMjMiLCJyb2xlIjoidXNlciIsImlzX3JlZnJlc2hfdG9rZW4iOmZhbHNlLCJleHAiOjE3NTYzMDg0MDUuNjkzMzc0Nn0.hLGoGMuwAiUs6JYLqeVnhqDetKxq9rdhfKEjfHkDTT8";
+
+        // Get current user information by searching for the username from JWT using service token
+        public static async Task<UserDto?> GetCurrentUserAsync(string userToken)
+        {
+            try
+            {
+                // First, decode the user's JWT to get the username
+                var jwtPayload = DecodeJwtPayload(userToken);
+                if (jwtPayload == null || !jwtPayload.Value.TryGetProperty("username", out var usernameElement))
+                {
+                    Console.WriteLine("[DEBUG] Could not extract username from user JWT token");
+                    return null;
+                }
+
+                var username = usernameElement.GetString();
+                if (string.IsNullOrEmpty(username))
+                {
+                    Console.WriteLine("[DEBUG] Username is empty in user JWT token");
+                    return null;
+                }
+
+                Console.WriteLine($"[DEBUG] Using service token to search for user: '{username}'");
+
+                // Use the service token (Test123) to search for the current user
+                // This works because Test123 can search for other users, including the logged-in user
+                var users = await SearchUsersAsync(SERVICE_TOKEN, username);
+                if (users == null || users.Count == 0)
+                {
+                    Console.WriteLine($"[DEBUG] No users found when searching for username: '{username}' using service token");
+                    return null;
+                }
+
+                // Find exact match for the username
+                var currentUser = users.FirstOrDefault(u =>
+                    !string.IsNullOrEmpty(u.username) &&
+                    u.username.Trim().Equals(username.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                if (currentUser != null)
+                {
+                    Console.WriteLine($"[DEBUG] Current user found via service token: {currentUser.username} (ID: {currentUser._id})");
+                    return currentUser;
+                }
+
+                Console.WriteLine($"[DEBUG] Exact username match not found for: '{username}' using service token");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[DEBUG] GetCurrentUserAsync error: {ex.Message}");
+                return null;
+            }
+        }
+
+        // Helper method to decode JWT payload without creating a UserDto
+        private static JsonElement? DecodeJwtPayload(string token)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(token))
+                    return null;
+
+                var parts = token.Split('.');
+                if (parts.Length != 3)
+                    return null;
+
+                var payload = parts[1];
+                switch (payload.Length % 4)
+                {
+                    case 2: payload += "=="; break;
+                    case 3: payload += "="; break;
+                }
+
+                var jsonBytes = Convert.FromBase64String(payload);
+                var jsonString = Encoding.UTF8.GetString(jsonBytes);
+
+                using var doc = JsonDocument.Parse(jsonString);
+                return doc.RootElement.Clone();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[DEBUG] JWT payload decode error: {ex.Message}");
+                return null;
+            }
+        }
+
     }
 
 

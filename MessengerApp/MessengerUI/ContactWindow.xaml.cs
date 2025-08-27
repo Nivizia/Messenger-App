@@ -39,8 +39,46 @@ namespace MessengerUI
             // Load saved token
             LoadToken();
 
+            // Load current user info using service token approach
+            await LoadCurrentUser();
+
             // Load all users automatically
             await LoadAllUsers();
+        }
+
+        private async Task LoadCurrentUser()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(currentToken))
+                {
+                    StatusLabel.Text = "No token available for user lookup";
+                    StatusLabel.Foreground = new SolidColorBrush(Colors.Orange);
+                    return;
+                }
+
+                // Use the service token approach to get current user info
+                var currentUser = await ChatService.GetCurrentUserAsync(currentToken);
+
+                if (currentUser != null)
+                {
+                    StatusLabel.Text = $"Current user found: {currentUser.username} (ID: {currentUser._id})";
+                    StatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+                    Console.WriteLine($"[DEBUG] Successfully loaded current user: {currentUser.username} (ID: {currentUser._id})");
+                    return;
+                }
+
+                // If we still don't have current user info
+                StatusLabel.Text = "Error: Could not find current user. Check your login credentials.";
+                StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                Console.WriteLine($"[DEBUG] Failed to load current user for username: {Username}");
+            }
+            catch (Exception ex)
+            {
+                StatusLabel.Text = $"Error loading current user: {ex.Message}";
+                StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                Console.WriteLine($"[DEBUG] LoadCurrentUser error: {ex.Message}");
+            }
         }
 
         private void LoadToken()
@@ -211,6 +249,58 @@ namespace MessengerUI
                     StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
                     MessageBox.Show($"Error starting chat: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Show confirmation dialog
+            MessageBoxResult result = MessageBox.Show(
+                "Are you sure you want to logout?",
+                "Confirm Logout",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                PerformLogout();
+            }
+        }
+
+        private void PerformLogout()
+        {
+            try
+            {
+                // Clear the stored token
+                if (File.Exists("auth.token"))
+                {
+                    File.Delete("auth.token");
+                    StatusLabel.Text = "Logged out successfully";
+                    StatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+                }
+
+                // Close any open chat windows (child windows)
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window is ChattingWindow && window.Owner == this)
+                    {
+                        window.Close();
+                    }
+                }
+
+                // Open login window
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.Show();
+
+                // Close current window
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                StatusLabel.Text = $"Logout error: {ex.Message}";
+                StatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                MessageBox.Show($"Error during logout: {ex.Message}", "Logout Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

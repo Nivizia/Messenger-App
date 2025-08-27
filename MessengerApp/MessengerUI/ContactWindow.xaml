@@ -16,10 +16,21 @@
         </Grid.RowDefinitions>
 
         <!-- Header Section -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,10">
-            <TextBlock Text="Welcome back!" FontSize="16" FontWeight="Bold"/>
-            <TextBlock x:Name="UsernamePlaceholder" Text="UsernamePlaceholder" FontSize="14" Foreground="Gray"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Welcome back!" FontSize="16" FontWeight="Bold"/>
+                <TextBlock x:Name="UsernamePlaceholder" Text="UsernamePlaceholder" FontSize="14" Foreground="Gray"/>
+            </StackPanel>
+
+            <Button x:Name="LogoutButton" Grid.Column="1" Content="Logout" Width="80" Height="30"
+                    VerticalAlignment="Top" Click="LogoutButton_Click"
+                    Background="LightCoral" Foreground="White"/>
+        </Grid>
 
         <!-- Search Section -->
         <StackPanel Grid.Row="1" Margin="0,0,0,10">
